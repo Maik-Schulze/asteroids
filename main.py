@@ -1,6 +1,8 @@
 import pygame
 from player import *
+from asteroid import *
 from constants import *
+from asteroidfield import *
 
 def main():
 	# Initialize the pygame module
@@ -13,13 +15,21 @@ def main():
 	# Set up the display window with the specified width and height
 	screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 	
-	# Create sprite groups for updatable and drawable objects
+	# Create sprite groups for updatable and drawable objects as well as all asteroids
 	updatable = pygame.sprite.Group()
 	drawable = pygame.sprite.Group()
+	asteroids = pygame.sprite.Group()
 
-	# Create a player object at the center of the screen
+	# Add player class to the updatable and drawable groups and create a player object at the center of the screen
 	Player.containers = (updatable, drawable)
 	player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+
+	# Add asteroid class to the updatable, drawable and asteroid groups
+	Asteroid.containers = (asteroids, updatable, drawable)
+
+	# Add asteroid field class to the updatable group and create a asteroidfield object
+	AsteroidField.containers = (updatable)
+	asteroidfield = AsteroidField()
 
 	while True: # Game loop
 		# Handle events in the event queue

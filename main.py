@@ -1,3 +1,4 @@
+import sys
 import pygame
 from player import *
 from asteroid import *
@@ -41,6 +42,12 @@ def main():
 		# Update the position and state of every object that is updatable
 		for obj in updatable:
 			obj.update(dt)
+		
+		# Check for collisions between the player and the asteroids and exit game if collision is detected
+		for asteroid in asteroids:
+			if asteroid.collides_with(player):
+				print("Game over!")
+				sys.exit()
 
 		# Fill the screen with black color
 		pygame.Surface.fill(screen, (0, 0, 0))

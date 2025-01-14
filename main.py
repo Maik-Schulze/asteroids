@@ -1,4 +1,5 @@
 import pygame
+from player import *
 from constants import *
 
 def main():
@@ -12,7 +13,10 @@ def main():
 	# Set up the display window with the specified width and height
 	screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 	
-	while True: #game loop
+	# Create a player object at the center of the screen
+	player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+
+	while True: # Game loop
 		# Handle events in the event queue
 		for event in pygame.event.get():
 			# Exit the game loop if the quit event is triggered
@@ -21,6 +25,10 @@ def main():
 		
 		# Fill the screen with black color
 		pygame.Surface.fill(screen, (0, 0, 0))
+
+		# Draw the player on the screen
+		player.draw(screen)
+		
 		# Update the full display surface to the screen
 		pygame.display.flip()
 		

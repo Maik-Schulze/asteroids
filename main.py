@@ -13,7 +13,12 @@ def main():
 	# Set up the display window with the specified width and height
 	screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 	
+	# Create sprite groups for updatable and drawable objects
+	updatable = pygame.sprite.Group()
+	drawable = pygame.sprite.Group()
+
 	# Create a player object at the center of the screen
+	Player.containers = (updatable, drawable)
 	player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
 
 	while True: # Game loop
@@ -23,14 +28,16 @@ def main():
 			if event.type == pygame.QUIT:
 				return
 		
-		# Update the player's position and state
-		player.update(dt)
+		# Update the position and state of every object that is updatable
+		for obj in updatable:
+			obj.update(dt)
 
 		# Fill the screen with black color
 		pygame.Surface.fill(screen, (0, 0, 0))
 
-		# Draw the player on the screen
-		player.draw(screen)
+		# Draw every drawable object on the screen
+		for obj in drawable:
+			obj.draw(screen)
 		
 		# Update the full display surface to the screen
 		pygame.display.flip()

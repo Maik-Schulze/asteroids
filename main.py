@@ -4,6 +4,7 @@ from player import *
 from asteroid import *
 from constants import *
 from asteroidfield import *
+from shot import *
 
 def main():
 	# Initialize the pygame module
@@ -16,20 +17,20 @@ def main():
 	# Set up the display window with the specified width and height
 	screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 	
-	# Create sprite groups for updatable and drawable objects as well as all asteroids
+	# Create sprite groups for updatable and drawable objects as well as all asteroids and shots
 	updatable = pygame.sprite.Group()
 	drawable = pygame.sprite.Group()
 	asteroids = pygame.sprite.Group()
-
-	# Add player class to the updatable and drawable groups and create a player object at the center of the screen
+	shots = pygame.sprite.Group()
 	Player.containers = (updatable, drawable)
+	Asteroid.containers = (asteroids, updatable, drawable)
+	AsteroidField.containers = (updatable)
+	Shot.containers = (shots,updatable,drawable)
+
+	# Create a player object at the center of the screen
 	player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
 
-	# Add asteroid class to the updatable, drawable and asteroid groups
-	Asteroid.containers = (asteroids, updatable, drawable)
-
-	# Add asteroid field class to the updatable group and create a asteroidfield object
-	AsteroidField.containers = (updatable)
+	# Create a asteroidfield object
 	asteroidfield = AsteroidField()
 
 	while True: # Game loop
@@ -43,11 +44,17 @@ def main():
 		for obj in updatable:
 			obj.update(dt)
 		
-		# Check for collisions between the player and the asteroids and exit game if collision is detected
 		for asteroid in asteroids:
+			# Check for collisions between the player and the asteroids and exit game if collision is detected
 			if asteroid.collides_with(player):
 				print("Game over!")
 				sys.exit()
+			
+			# Check for collisions between the shots and the asteroids
+			for shot in shots:
+				if asteroid.collides_with(shot):
+					shot.kill()
+					asteroid.kill()
 
 		# Fill the screen with black color
 		pygame.Surface.fill(screen, (0, 0, 0))

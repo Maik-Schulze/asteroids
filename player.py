@@ -1,11 +1,13 @@
 import pygame
 from circleshape import *
-from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED
+from shot import *
+from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN
 
 class Player(CircleShape):
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
-        self.rotation = 0  # Initialize the player's rotation angle
+        self.rotation = 0   # Initialize the player's rotation angle
+        self.timer = 0      # Initialize the player's shot timer
     
     def triangle(self):
         # Calculate the vertices of the player's triangular shape
@@ -29,9 +31,22 @@ class Player(CircleShape):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         self.position += forward * PLAYER_SPEED * dt
 
+    def shoot(self):
+        if self.timer > 0: return
+        self.shoot_timer = PLAYER_SHOOT_COOLDOWN
+        # Create a new shot object at the player's current position
+        shot = Shot(self.position[0], self.position[1])
+        # Set the shot's velocity based on the player's current rotation and shoot speed
+        shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
+        self.timer = PLAYER_SHOOT_COOLDOWN
+
+
     def update(self, dt):
         # Update the player's state based on keyboard input
         keys = pygame.key.get_pressed()
+
+        # Decrease the player's shot timer by the elapsed time 
+        self.timer -= dt
 
         if keys[pygame.K_w]:
             self.move(dt)       # Move forwards
@@ -41,3 +56,5 @@ class Player(CircleShape):
             self.rotate(-dt)    # Rotate left
         if keys[pygame.K_d]:
             self.rotate(dt)     # Rotate right
+        if keys[pygame.K_SPACE]:
+            self.shoot()

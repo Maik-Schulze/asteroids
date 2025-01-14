@@ -1,9 +1,15 @@
+# Screen dimensions
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
+
+# Maximum frames per second
 MAX_FPS = 60
 
+# Player settings
 PLAYER_RADIUS = 20
+PLAYER_TURN_SPEED = 300
 
+# Asteroid settings
 ASTEROID_MIN_RADIUS = 20
 ASTEROID_KINDS = 3
 ASTEROID_SPAWN_RATE = 0.8  # seconds

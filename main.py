@@ -23,6 +23,9 @@ def main():
 			if event.type == pygame.QUIT:
 				return
 		
+		# Update the player's position and state
+		player.update(dt)
+
 		# Fill the screen with black color
 		pygame.Surface.fill(screen, (0, 0, 0))
 
